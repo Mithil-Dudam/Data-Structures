@@ -12,6 +12,7 @@ This repository contains clean, efficient, and well-tested implementations of fu
 - **Singly Linked List** (`singly_linked_list.py`): Insert, delete (by value/index), search, length, and traversal.
 - **Doubly Linked List** (`doubly_linked_list.py`): Insert, delete (by value/index), search, length, and traversal.
 - **Binary Search Tree** (`binary_search_tree.py`): Insert, delete, search, and in-order/pre-order/post-order traversals.
+- **HashMap** (`hashmap.py`): Custom hash map with put, get, remove, contains, keys, values, items, and length methods. Handles collisions with separate chaining.
 
 ## Features
 
@@ -33,6 +34,7 @@ python queue.py
 python singly_linked_list.py
 python doubly_linked_list.py
 python binary_search_tree.py
+python hashmap.py
 ```
 
 ## Learning & Interview Prep
