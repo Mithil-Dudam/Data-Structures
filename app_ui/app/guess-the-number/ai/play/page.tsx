@@ -1,9 +1,11 @@
 "use client"
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Play() {
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const sessionID = searchParams.get("session_id")
 
     const [error, setError] = useState<string | null>(null)
     const [screen, setScreen] = useState<number>(0)
@@ -24,7 +26,8 @@ export default function Play() {
             },
             body: JSON.stringify({
                 start: newStartRange !== null ? newStartRange : startRange,
-                end: newEndRange !== null ? newEndRange : endRange
+                end: newEndRange !== null ? newEndRange : endRange,
+                session_id: sessionID
             })
         })
         const data = await response.json()
@@ -38,42 +41,58 @@ export default function Play() {
             setNewStartRange(data.new_start)
             setNewEndRange(data.new_end)
         } else {
-            setError("An error occurred while making the guess. Please try again.")
+            setError(data.detail)
         }
     }
 
     const reset = async () => {
-        await fetch("http://localhost:8000/guess-the-number/reset", {
+        const response = await fetch("http://localhost:8000/guess-the-number/reset", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
-            }
+            },
+            body: JSON.stringify({
+                session_id: sessionID
+            })
         })
-        setError(null)
-        setScreen(0)
-        setStartRange(1)
-        setEndRange(100000000000)
-        setMessage(null)
-        setAttempts(0)
-        setGameOver(null)
-        setNewStartRange(null)
-        setNewEndRange(null)
-        setMid(null)
+        const data = await response.json()
+        if (response.status === 200){
+            setError(null)
+            setScreen(0)
+            setStartRange(1)
+            setEndRange(100000000000)
+            setMessage(null)
+            setAttempts(0)
+            setGameOver(null)
+            setNewStartRange(null)
+            setNewEndRange(null)
+            setMid(null)
+        }else{
+            setError(data.detail)
+        }
     }
 
     useEffect(() => {
         const checkGameStatus = async () => {
             const response = await fetch("http://localhost:8000/guess-the-number/status", {
-                method: "GET",
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json"
-                }
+                },
+                body: JSON.stringify({
+                    session_id: sessionID
+                })
             });
-            const data = await response.json()
-            const status = data.status
-            if (status === false){
+            if (response.status !== 200) {
                 router.push("/guess-the-number/ai")
-            }       
+                return
+            }else{
+                const data = await response.json()
+                if(data.status === false){
+                    router.push("/guess-the-number/ai")
+                    return
+                }  
+            }
         }
         checkGameStatus()
     }, [])

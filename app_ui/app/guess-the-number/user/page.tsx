@@ -22,7 +22,7 @@ export default function User(){
         })
         const data = await response.json()
         if (response.status === 200){
-            router.push(`/guess-the-number/user/play?start=${startRange}&end=${endRange}`)
+            router.push(`/guess-the-number/user/play?start=${startRange}&end=${endRange}&session_id=${data.session_id}`)
         }else{
             setError(data.detail)
         }

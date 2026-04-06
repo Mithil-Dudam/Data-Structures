@@ -9,6 +9,7 @@ export default function Play(){
     const searchParams = useSearchParams()
     const startRange = Number(searchParams.get("start"))
     const endRange = Number(searchParams.get("end"))
+    const sessionID = searchParams.get("session_id")
     const [guess, setGuess] = useState<number|null>(null)
     const [message, setMessage] = useState<string|null>(null)
     const [attempts, setAttempts] = useState<number>(0)
@@ -17,12 +18,19 @@ export default function Play(){
     useEffect(() => {
         const checkGameStatus = async () => {
             const response = await fetch("http://localhost:8000/guess-the-number/status", {
-            method: "GET",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json"
-            }
+            },
+            body: JSON.stringify({
+                session_id: sessionID
+            })
             });
             const data = await response.json()
+            if (response.status !== 200) {
+                router.push("/guess-the-number/user")
+                return
+            }
             const status = data.status 
             if (
                 status === false ||
@@ -43,7 +51,8 @@ export default function Play(){
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                guess: guess
+                guess: guess,
+                session_id: sessionID
             })
         })
         const data = await response.json()
@@ -52,22 +61,30 @@ export default function Play(){
             setAttempts(data.attempts)
             setGameOver(data.game_over)
         }else{
-            setError("An error occurred while making the guess. Please try again.")
+            setError(data.detail)
         }
     }
 
     const reset = async () => {
-        await fetch("http://localhost:8000/guess-the-number/reset", {
+        const response = await fetch("http://localhost:8000/guess-the-number/reset", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
-            }
+            },
+            body: JSON.stringify({
+                session_id: sessionID
+            })
         })
-        setError(null)
-        setGuess(null)
-        setAttempts(0)
-        setGameOver(false)
-        setMessage(null)
+        const data = await response.json()
+        if (response.status === 200){
+            setError(null)
+            setGuess(null)
+            setAttempts(0)
+            setGameOver(false)
+            setMessage(null)
+        }else{
+            setError(data.detail)
+        }
     }
 
     return(

@@ -20,7 +20,7 @@ export default function AI(){
         })
         const data = await response.json()
         if (response.status === 200){
-            router.push("/guess-the-number/ai/play")
+            router.push(`/guess-the-number/ai/play?session_id=${data.session_id}`)
         }else{
             setError(data.detail)
         }
