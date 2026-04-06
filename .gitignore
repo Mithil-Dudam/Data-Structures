@@ -37,3 +37,13 @@ Thumbs.db
 
 # Misc
 *.log
+
+# Docker
+*.tar
+*.img
+/app/__pycache__/
+/app/.venv/
+/app/.dockerignore
+/app/Dockerfile
+/app_ui/.dockerignore
+/app_ui/Dockerfile

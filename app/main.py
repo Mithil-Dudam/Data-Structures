@@ -1,8 +1,17 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import guess_the_number
+from routes import guess_the_number
+from contextlib import asynccontextmanager
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("Server is starting up!")
+    app.state.sessions = dict()
+    yield
+    print("Server is shutting down!")
+    del app.state.sessions
+
+app = FastAPI(lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],  

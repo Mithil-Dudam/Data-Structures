@@ -1,8 +1,8 @@
 "use client"
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense  } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
-export default function Play(){
+function PlayContent() {
     const router = useRouter()
 
     const [error, setError] = useState<string|null>(null)
@@ -115,5 +115,15 @@ export default function Play(){
                 </div>
             }
         </div>
+    )
+}
+
+
+
+export default function Play(){
+    return(
+        <Suspense fallback={<div className="text-center p-10">Loading game...</div>}>
+            <PlayContent />
+        </Suspense>
     )
 }
