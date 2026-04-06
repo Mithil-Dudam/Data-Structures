@@ -1,2 +1,39 @@
-.venv/ 
+# Python
 __pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pdb
+*.egg-info/
+dist/
+build/
+.venv/
+env/
+.venv*/
+*.sqlite3
+
+# Node.js / Next.js
+node_modules/
+.npm/
+.pnpm-debug.log*
+.yarn/
+.next/
+out/
+build/
+coverage/
+*.tsbuildinfo
+
+# Environment files
+.env*
+!.env.example
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Misc
+*.log
