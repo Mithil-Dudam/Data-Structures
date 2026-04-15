@@ -7,6 +7,7 @@ from contextlib import asynccontextmanager
 from routes.singly_linked_list import router as sll_router
 from routes.doubly_linked_list import router as dll_router
 from routes.stack import router as stack_router
+from routes.queue import router as queue_router
 from utils import cleanup_sessions
 
 @asynccontextmanager
@@ -33,6 +34,8 @@ app.add_middleware(
 app.include_router(sll_router)
 app.include_router(dll_router)
 app.include_router(stack_router)
+app.include_router(queue_router)
+
 @app.get("/create-session", status_code=status.HTTP_201_CREATED)
 async def create_session():
     session_id = str(uuid.uuid4())
