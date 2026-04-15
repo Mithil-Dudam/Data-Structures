@@ -1,49 +1,52 @@
 # Python
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
-*.pyc
-*.pdb
+*.so
+*.egg
 *.egg-info/
 dist/
 build/
+.eggs/
+*.pyo
+*.pyd
+*.env
 .venv/
-env/
-.venv*/
-*.sqlite3
+venv/
+ENV/
+.env
+.env.*
 
-# Node.js / Next.js
-node_modules/
-.npm/
-.pnpm-debug.log*
-.yarn/
-.next/
-out/
-build/
-coverage/
-*.tsbuildinfo
+# VSCode
+.vscode/
 
-# Environment files
-.env*
-!.env.example
-
-# OS / Editor
+# OS
 .DS_Store
 Thumbs.db
-.vscode/
-.idea/
-*.swp
+
+# Node/Next.js (frontend)
+app_ui/node_modules/
+app_ui/.next/
+app_ui/.env*
+app_ui/.vercel/
+app_ui/coverage/
+app_ui/.pnp
+app_ui/pnpm-debug.log*
+app_ui/yarn-debug.log*
+app_ui/yarn-error.log*
+app_ui/.pnp.*
+app_ui/.yarn/*
+!app_ui/.yarn/patches
+!app_ui/.yarn/plugins
+!app_ui/.yarn/releases
+!app_ui/.yarn/versions
+
+# Lock files
+uv.lock
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
 
 # Misc
 *.log
-
-# Docker
-*.tar
-*.img
-/app/__pycache__/
-/app/.venv/
-/app/.dockerignore
-/app/Dockerfile
-/app_ui/.dockerignore
-/app_ui/Dockerfile
+*.pem
+*.tsbuildinfo

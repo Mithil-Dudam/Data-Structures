@@ -1,10 +1,9 @@
-"use client"
-import { useRouter } from "next/navigation";
-
 export default function Home() {
-    const router = useRouter()
-
-    return (
-        router.push("/guess-the-number")
-    )
+  return (
+    <div>
+      <h1 className="text-center">Hello!</h1>
+      <p><a href="/sll">Click for SLL</a></p>
+      <p><a href="/dll">Click for DLL</a></p>
+    </div>
+  );
 }
