@@ -1,23 +1,17 @@
-import uuid
-from fastapi import APIRouter, HTTPException, status, Depends, Request
-from schemas.linked_list import CreateResponse, ActionResponse, Insert, Value, Index, MessageResponse, Session
+from fastapi import APIRouter, HTTPException, status, Depends
+from schemas.linked_list import ActionResponse, Insert, Value, Index, MessageResponse, Session
 from services.singly_linked_list import SinglyLinkedList
+from utils import get_sessions
 
 router = APIRouter(prefix="/sll", tags=["Singly Linked List"])
-
-def get_sessions(request: Request):
-    return request.app.state.sessions
-
-def validate_session():
-    pass
  
-@router.post("/create", response_model=CreateResponse, status_code=status.HTTP_201_CREATED)
-async def create(sessions=Depends(get_sessions)):
-    session_id = str(uuid.uuid4())
+@router.post("/create", response_model=MessageResponse, status_code=status.HTTP_201_CREATED)
+async def create(user:Session, sessions=Depends(get_sessions)):
+    if user.session_id not in sessions:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Session not found")
     sll = SinglyLinkedList()
-    sessions[session_id] = dict()
-    sessions[session_id]["sll"] = sll
-    return {"message": "Singly Linked List created successfully", "session_id": session_id}
+    sessions[user.session_id]["sll"] = sll
+    return {"message": "Singly Linked List created successfully"}
 
 @router.post("/insert", response_model=ActionResponse, status_code=status.HTTP_200_OK)
 async def insert(user: Insert, sessions = Depends(get_sessions)):
@@ -68,3 +62,10 @@ async def length(user: Session, sessions = Depends(get_sessions)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Session not found")
     sll = sessions[user.session_id]["sll"]
     return {"message": f"Length of list is {sll.length()}"}
+
+@router.post("/traverse", response_model=ActionResponse, status_code=status.HTTP_200_OK)
+async def traverse(user: Session, sessions = Depends(get_sessions)):
+    if user.session_id not in sessions:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Session not found")
+    sll = sessions[user.session_id]["sll"]
+    return {"message": "List of elements", "elements": sll.traverse()}

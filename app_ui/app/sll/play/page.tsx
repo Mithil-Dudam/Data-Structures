@@ -1,10 +1,13 @@
 "use client"
+import React from "react";
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 
 export default function Play() {
+    const router = useRouter()
     const [error, setError] = useState<string|null>(null)
     const [sessionID, setSessionID] = useState<string|null>(null)
-    const [options, setOptions] = useState(-1)
+    const [options, setOptions] = useState(0)
     const [value, setValue] = useState("")
     const [index, setIndex] = useState<number|null>(null)
     const [delIndex, setDelIndex] = useState<number>(-1)
@@ -13,15 +16,26 @@ export default function Play() {
 
     useEffect(() => {
         const createSLL = async () => {
-            const response = await fetch("http://localhost:8000/sll/create", {
-                method: "POST",
-            })
-            const data = await response.json()
-            if (response.status === 201){
-                setSessionID(data.session_id)
-            }else{
-                setError("Failed to create session")
+            const storedSession = sessionStorage.getItem("session_id")
+            if (storedSession){
+                setSessionID(storedSession)
+                const storedElements = sessionStorage.getItem("sll_elements")
+                if (storedElements){
+                    setElements(JSON.parse(storedElements))
+                    return 
+                }
+                await fetch("http://localhost:8000/sll/create", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        session_id: storedSession
+                    })
+                })
+                return
             }
+            router.push("/")
         }
         createSLL()
     }, [])
@@ -59,6 +73,7 @@ export default function Play() {
         if (response.status === 200){
             setMessage(data.message)
             setElements(data.elements)
+            sessionStorage.setItem("sll_elements", JSON.stringify(data.elements))
         }else{
             setError(data.detail)
         }
@@ -85,6 +100,7 @@ export default function Play() {
         if (response.status === 200){
             setMessage(data.message)
             setElements(data.elements)
+            sessionStorage.setItem("sll_elements", JSON.stringify(data.elements))
         }else{
             setError(data.detail)
         }
@@ -111,6 +127,7 @@ export default function Play() {
         if (response.status === 200){
             setMessage(data.message)
             setElements(data.elements)
+            sessionStorage.setItem("sll_elements", JSON.stringify(data.elements))
         }else{
             setError(data.detail)
         }
@@ -214,10 +231,20 @@ export default function Play() {
             }
             <div className="mt-5">
                 {message && <p className={`text-center mb-3 font-semibold ${message === "False" ? "text-red-500" : "text-green-500"}`}>{message}</p>}
-                <div className="text-center mx-auto mt-2 mb-2 bg-black text-white max-h-[4.5em] overflow-y-auto whitespace-pre-line">
-                    {elements.length > 0 && elements.join(" -> ")}
-                </div>
                 {error && <p className="text-red-500 text-center mt-3 font-semibold">{error}</p>}
+                <div className="flex items-center overflow-x-auto max-w-full py-2">
+                    {elements.map((el, idx) => (
+                        <React.Fragment key={idx}>
+                        <div className="border-2 border-yellow-300 rounded-lg px-4 py-2 mx-1 bg-black text-yellow-300 font-bold min-w-10 text-center">
+                            {el}
+                        </div>
+                        {idx < elements.length - 1 && (
+                            <span className="text-2xl text-yellow-300">→</span>
+                        )}
+                        </React.Fragment>
+                    ))}
+                    {elements.length > 0 &&<span className="ml-2 text-gray-400">null</span>}
+                </div>
             </div>
         </div>
     )

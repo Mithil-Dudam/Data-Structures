@@ -1,4 +1,20 @@
+"use client"
+
+import { useEffect } from "react"
+
 export default function Home() {
+  useEffect(() => {
+    const createSession = async () => {
+      const response = await fetch("http://localhost:8000/create-session", {
+        method: "GET",
+      })
+      const data = await response.json()
+      if (response.status === 201){
+        sessionStorage.setItem("session_id", data.session_id)
+      }
+    }
+    createSession()
+  }, [])
   return (
     <div>
       <h1 className="text-center">Hello!</h1>

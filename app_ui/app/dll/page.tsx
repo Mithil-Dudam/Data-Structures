@@ -1,8 +1,15 @@
 "use client"
+import { useEffect } from "react"
 import { useRouter } from "next/navigation";
 
 export default function DLL(){
     const router = useRouter()
+    useEffect(() => {
+        const storedSession = sessionStorage.getItem("session_id")
+        if (! storedSession){
+            router.push("/")
+        }
+    }, [])
     return (
         <div className="border-4 border-yellow-300 p-5 rounded-lg text-lg">
             <h2 className="text-center text-3xl mt-5 mb-10 font-semibold"><span className="border-b-2 border-yellow-300">A Quick Description</span></h2>

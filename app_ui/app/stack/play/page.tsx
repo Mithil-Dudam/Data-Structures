@@ -1,0 +1,165 @@
+"use client"
+import React from "react";
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+
+export default function Play() {
+    const router = useRouter()
+    const [error, setError] = useState<string|null>(null)
+    const [sessionID, setSessionID] = useState<string|null>(null)
+    const [options, setOptions] = useState(0)
+    const [value, setValue] = useState("")
+    const [message, setMessage] = useState<string|null>(null)
+    const [elements, setElements] = useState<string[]>([])
+
+    useEffect(() => {
+        const createStack = async () => {
+            const storedSession = sessionStorage.getItem("session_id")
+            if (storedSession){
+                setSessionID(storedSession)
+                const storedElements = sessionStorage.getItem("stack_elements")
+                if (storedElements){
+                    setElements(JSON.parse(storedElements))
+                    return 
+                }
+                await fetch("http://localhost:8000/stack/create", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        session_id: storedSession
+                    })
+                })
+                return
+            }
+            router.push("/")
+        }
+        createStack()
+    }, [])
+
+    const ChangeOptions = () => {
+        setValue("")
+        setMessage(null)
+    }
+
+    const push = async () => {
+        if (value === "") {
+            setError("Value cannot be empty")
+            return
+        }
+        setError(null)
+        setMessage(null)
+        const response = await fetch("http://localhost:8000/stack/push", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                session_id: sessionID,
+                value:value,
+            })
+        })
+        const data = await response.json()
+        if (response.status === 200){
+            setMessage(data.message)
+            setElements(data.elements)
+            sessionStorage.setItem("stack_elements", JSON.stringify(data.elements))
+        }else{
+            setError(data.detail)
+        }
+    }
+
+    const pop = async () => {
+        setError(null)
+        setMessage(null)
+        const response = await fetch("http://localhost:8000/stack/pop", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                session_id: sessionID,
+            })
+        })
+        const data = await response.json()
+        if (response.status === 200){
+            setMessage(data.message)
+            setElements(data.elements)
+            sessionStorage.setItem("stack_elements", JSON.stringify(data.elements))
+        }else{
+            setError(data.detail)
+        }
+    }
+
+    const getLength = async () => {
+        setError(null)
+        setMessage(null)
+        const response = await fetch("http://localhost:8000/stack/length", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                session_id: sessionID,
+            })
+        })
+        const data = await response.json()
+        if (response.status === 200){
+            setMessage(data.message)
+        }else{
+            setError("Failed to get length")
+        }
+    }
+
+    return (
+        <div className="border-4 border-yellow-300 p-5 rounded-lg w-[70%]">
+            <h2 className="text-2xl text-center">You can select your options here and view how the stack behaves</h2>
+            <div className="flex justify-between my-5">
+                <button className={`mx-auto text-lg cursor-pointer border-2 border-yellow-300 p-2 rounded font-semibold ${options === 0 ? 'bg-green-900':"hover:text-black hover:bg-white"}`} onClick={() => {setOptions(0); ChangeOptions()}}>Push Element</button>
+                <button className={`mx-auto text-lg cursor-pointer border-2 border-yellow-300 p-2 rounded font-semibold ${options === 1 ? 'bg-green-900':"hover:text-black hover:bg-white"}`} onClick={() => {setOptions(1); ChangeOptions()}}>Pop Element</button>
+                <button className={`mx-auto text-lg cursor-pointer border-2 border-yellow-300 p-2 rounded font-semibold ${options === 2 ? 'bg-green-900':"hover:text-black hover:bg-white"}`} onClick={() => {setOptions(2); ChangeOptions(); getLength()}}>Get Length</button>
+            </div>
+            {options === 0 && 
+            <div className="border-t-2 border-b-2 pt-5">
+                <div className="flex flex-col items-center my-5">
+                    <div className="flex flex-row items-center w-full max-w-md">
+                        <label className="w-48 text-right mr-4">Enter value to insert</label>
+                        <input
+                        type="text"
+                        value={value}
+                        onChange={(e) => setValue(e.target.value)}
+                        className="bg-white text-black pl-2 flex-1"
+                        />
+                    </div>
+                </div>
+                <div className="flex justify-center mt-10 mb-5">
+                    <button className="mx-auto cursor-pointer border-2 border-yellow-300 p-2 rounded hover:text-black hover:bg-white disabled:cursor-not-allowed disabled:opacity-50" onClick={push} disabled={value === ""}>Push</button>
+                </div>
+            </div>
+            }
+            {options === 1 && 
+            <div className="border-t-2 border-b-2 pt-5">
+                <div className="flex justify-center mb-5">
+                    <button className="mx-auto cursor-pointer border-2 border-yellow-300 p-2 rounded hover:text-black hover:bg-white" onClick={pop}>Pop</button>
+                </div>
+            </div>
+            }
+            <div className="mt-5">
+                {message && <p className={`text-center mb-3 font-semibold ${message === "False" ? "text-red-500" : "text-green-500"}`}>{message}</p>}
+                {error && <p className="text-red-500 text-center mt-3 font-semibold">{error}</p>}
+                <div className="flex flex-col items-center overflow-y-auto max-h-70">
+                    {elements.length > 0 && <span className="text-yellow-300 mb-2">Top</span>}
+                    {elements.map((el, idx) => (
+                        <div
+                        key={idx}
+                        className="border-2 border-yellow-300 rounded-lg px-8 py-2 my-1 bg-black text-yellow-300 font-bold min-w-15 text-center"
+                        >
+                        {el}
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    )
+}
