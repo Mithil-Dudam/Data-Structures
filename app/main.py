@@ -1,22 +1,25 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import guess_the_number
 from contextlib import asynccontextmanager
+from routes.singly_linked_list import router as sll_router
+from routes.doubly_linked_list import router as dll_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("Server is starting up!")
+    print("Creating sessions dictionary")
     app.state.sessions = dict()
     yield
-    print("Server is shutting down!")
     del app.state.sessions
+    print("Sessions dictionary deleted")
 
 app = FastAPI(lifespan=lifespan)
-app.add_middleware(
+app.add_middleware( 
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-app.include_router(guess_the_number.router)
+
+app.include_router(sll_router)
+app.include_router(dll_router)
