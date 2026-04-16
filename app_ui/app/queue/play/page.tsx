@@ -1,4 +1,5 @@
 "use client"
+import React from "react";
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
@@ -12,16 +13,16 @@ export default function Play() {
     const [elements, setElements] = useState<string[]>([])
 
     useEffect(() => {
-        const createStack = async () => {
+        const createQueue = async () => {
             const storedSession = sessionStorage.getItem("session_id")
             if (storedSession){
                 setSessionID(storedSession)
-                const storedElements = sessionStorage.getItem("stack_elements")
+                const storedElements = sessionStorage.getItem("queue_elements")
                 if (storedElements){
                     setElements(JSON.parse(storedElements))
                     return 
                 }
-                await fetch("http://localhost:8000/stack/create", {
+                await fetch("http://localhost:8000/queue/create", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -34,7 +35,7 @@ export default function Play() {
             }
             router.push("/")
         }
-        createStack()
+        createQueue()
     }, [])
 
     const ChangeOptions = () => {
@@ -42,14 +43,14 @@ export default function Play() {
         setMessage(null)
     }
 
-    const push = async () => {
+    const enqueue = async () => {
         if (value === "") {
             setError("Value cannot be empty")
             return
         }
         setError(null)
         setMessage(null)
-        const response = await fetch("http://localhost:8000/stack/push", {
+        const response = await fetch("http://localhost:8000/queue/enqueue", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -63,16 +64,16 @@ export default function Play() {
         if (response.status === 200){
             setMessage(data.message)
             setElements(data.elements)
-            sessionStorage.setItem("stack_elements", JSON.stringify(data.elements))
+            sessionStorage.setItem("queue_elements", JSON.stringify(data.elements))
         }else{
             setError(data.detail)
         }
     }
 
-    const pop = async () => {
+    const dequeue = async () => {
         setError(null)
         setMessage(null)
-        const response = await fetch("http://localhost:8000/stack/pop", {
+        const response = await fetch("http://localhost:8000/queue/dequeue", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -85,7 +86,7 @@ export default function Play() {
         if (response.status === 200){
             setMessage(data.message)
             setElements(data.elements)
-            sessionStorage.setItem("stack_elements", JSON.stringify(data.elements))
+            sessionStorage.setItem("queue_elements", JSON.stringify(data.elements))
         }else{
             setError(data.detail)
         }
@@ -94,7 +95,7 @@ export default function Play() {
     const getLength = async () => {
         setError(null)
         setMessage(null)
-        const response = await fetch("http://localhost:8000/stack/length", {
+        const response = await fetch("http://localhost:8000/queue/length", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -113,10 +114,10 @@ export default function Play() {
 
     return (
         <div className="border-4 border-yellow-300 p-5 rounded-lg w-[70%]">
-            <h2 className="text-2xl text-center">You can select your options here and view how the stack behaves</h2>
+            <h2 className="text-2xl text-center">You can select your options here and view how the queue behaves</h2>
             <div className="flex justify-between my-5">
-                <button className={`mx-auto text-lg cursor-pointer border-2 border-yellow-300 p-2 rounded font-semibold ${options === 0 ? 'bg-green-900':"hover:text-black hover:bg-white"}`} onClick={() => {setOptions(0); ChangeOptions()}}>Push Element</button>
-                <button className={`mx-auto text-lg cursor-pointer border-2 border-yellow-300 p-2 rounded font-semibold ${options === 1 ? 'bg-green-900':"hover:text-black hover:bg-white"}`} onClick={() => {setOptions(1); ChangeOptions()}}>Pop Element</button>
+                <button className={`mx-auto text-lg cursor-pointer border-2 border-yellow-300 p-2 rounded font-semibold ${options === 0 ? 'bg-green-900':"hover:text-black hover:bg-white"}`} onClick={() => {setOptions(0); ChangeOptions()}}>Enqueue Element</button>
+                <button className={`mx-auto text-lg cursor-pointer border-2 border-yellow-300 p-2 rounded font-semibold ${options === 1 ? 'bg-green-900':"hover:text-black hover:bg-white"}`} onClick={() => {setOptions(1); ChangeOptions()}}>Dequeue Element</button>
                 <button className={`mx-auto text-lg cursor-pointer border-2 border-yellow-300 p-2 rounded font-semibold ${options === 2 ? 'bg-green-900':"hover:text-black hover:bg-white"}`} onClick={() => {setOptions(2); ChangeOptions(); getLength()}}>Get Length</button>
             </div>
             {options === 0 && 
@@ -133,30 +134,33 @@ export default function Play() {
                     </div>
                 </div>
                 <div className="flex justify-center mt-10 mb-5">
-                    <button className="mx-auto cursor-pointer border-2 border-yellow-300 p-2 rounded hover:text-black hover:bg-white disabled:cursor-not-allowed disabled:opacity-50" onClick={push} disabled={value === ""}>Push</button>
+                    <button className="mx-auto cursor-pointer border-2 border-yellow-300 p-2 rounded hover:text-black hover:bg-white disabled:cursor-not-allowed disabled:opacity-50" onClick={enqueue} disabled={value === ""}>Enqueue</button>
                 </div>
             </div>
             }
             {options === 1 && 
             <div className="border-t-2 border-b-2 pt-5">
                 <div className="flex justify-center mb-5">
-                    <button className="mx-auto cursor-pointer border-2 border-yellow-300 p-2 rounded hover:text-black hover:bg-white" onClick={pop}>Pop</button>
+                    <button className="mx-auto cursor-pointer border-2 border-yellow-300 p-2 rounded hover:text-black hover:bg-white" onClick={dequeue}>Dequeue</button>
                 </div>
             </div>
             }
             <div className="mt-5">
                 {message && <p className={`text-center mb-3 font-semibold ${message === "False" ? "text-red-500" : "text-green-500"}`}>{message}</p>}
                 {error && <p className="text-red-500 text-center mt-3 font-semibold">{error}</p>}
-                <div className="flex flex-col items-center overflow-y-auto max-h-70">
-                    {elements.length > 0 && <span className="text-yellow-300 mb-2">Top</span>}
+                <div className="flex items-center overflow-x-auto max-w-full py-2">
+                    {elements.length > 0 && <span className="text-yellow-300 mr-2">Front</span>}
                     {elements.map((el, idx) => (
-                        <div
-                        key={idx}
-                        className="border-2 border-yellow-300 rounded-lg px-8 py-2 my-1 bg-black text-yellow-300 font-bold min-w-15 text-center"
-                        >
-                        {el}
+                        <React.Fragment key={idx}>
+                        <div className="border-2 border-yellow-300 rounded-lg px-4 py-2 mx-1 bg-black text-yellow-300 font-bold min-w-10 text-center">
+                            {el}
                         </div>
+                        {idx < elements.length - 1 && (
+                            <span className="text-2xl text-yellow-300 mx-1">→</span>
+                        )}
+                        </React.Fragment>
                     ))}
+                    {elements.length > 0 && <span className="ml-2 text-yellow-300">Rear</span>}
                 </div>
             </div>
         </div>

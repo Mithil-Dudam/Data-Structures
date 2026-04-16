@@ -20,6 +20,8 @@ export default function Home() {
       <h1 className="text-center">Hello!</h1>
       <p><a href="/sll">Click for SLL</a></p>
       <p><a href="/dll">Click for DLL</a></p>
+      <p><a href="/stack">Click for Stack</a></p>
+      <p><a href="/queue">Click for Queue</a></p>
     </div>
   );
 }
