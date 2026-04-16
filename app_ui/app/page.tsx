@@ -22,6 +22,7 @@ export default function Home() {
       <p><a href="/dll">Click for DLL</a></p>
       <p><a href="/stack">Click for Stack</a></p>
       <p><a href="/queue">Click for Queue</a></p>
+      <p><a href="/bst">Click for Binary Search Tree</a></p>
     </div>
   );
 }
