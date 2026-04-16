@@ -229,7 +229,7 @@ export default function Play() {
 
     return (
         <div className="border-4 border-yellow-300 p-5 rounded-lg w-[70%]">
-            <h2 className="text-2xl text-center">You can select your options here and view how the list behaves</h2>
+            <h2 className="text-2xl text-center">You can select your options here and view how the binary search tree behaves</h2>
             <div className="flex justify-between my-5">
                 <button className={`mx-auto text-lg cursor-pointer border-2 border-yellow-300 p-2 rounded font-semibold ${options === 0 ? 'bg-green-900':"hover:text-black hover:bg-white"}`} onClick={() => {setOptions(0); ChangeOptions()}}>Insert Element</button>
                 <button className={`mx-auto text-lg cursor-pointer border-2 border-yellow-300 p-2 rounded font-semibold ${options === 1 ? 'bg-green-900':"hover:text-black hover:bg-white"}`} onClick={() => {setOptions(1); ChangeOptions()}}>Delete Element</button>
