@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, status, HTTPException
-from schemas.linked_list import Session, Value, MessageResponse, ActionResponse
+from schemas.base import Session, MessageResponse
+from schemas.linked_list import Value, ActionResponse
 from services.queue import Queue
 from utils import get_sessions
 

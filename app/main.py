@@ -10,6 +10,7 @@ from routes.stack import router as stack_router
 from routes.queue import router as queue_router
 from routes.binary_search_tree import router as bst_router
 from routes.heap import router as heap_router
+from routes.trie import router as trie_router
 from utils import cleanup_sessions
 
 @asynccontextmanager
@@ -39,6 +40,7 @@ app.include_router(stack_router)
 app.include_router(queue_router)
 app.include_router(bst_router)
 app.include_router(heap_router)
+app.include_router(trie_router)
 
 @app.get("/create-session", status_code=status.HTTP_201_CREATED)
 async def create_session():

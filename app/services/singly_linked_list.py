@@ -1,15 +1,15 @@
-class Node:
-    def __init__(self, value):
-        self.value = value 
-        self.next = None
-
 class SinglyLinkedList:
+    class Node:
+        def __init__(self, value):
+            self.value = value 
+            self.next = None
+
     def __init__(self):
         self.head = None 
         self.size = 0
 
     def insert(self, value, index=None):
-        node = Node(value)
+        node = self.Node(value)
         if self.head is None or index == 0:
             node.next = self.head
             self.head = node

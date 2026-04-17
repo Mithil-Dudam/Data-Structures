@@ -1,6 +1,6 @@
 from typing import Optional, List
 from pydantic import BaseModel
-from schemas.linked_list import Session, MessageResponse
+from schemas.base import Session, MessageResponse
 
 class IntValue(Session):
     value: int

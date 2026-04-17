@@ -1,12 +1,5 @@
 from typing import Optional, Any, List
-from pydantic import BaseModel 
-
-class Session(BaseModel):
-    session_id: str
-
-class MessageResponse(BaseModel):
-    message: str
-
+from schemas.base import Session, MessageResponse
 class Insert(Session):
     value: Any
     index: Optional[int] = None

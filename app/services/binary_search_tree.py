@@ -1,16 +1,16 @@
-class Node:
-    def __init__(self, value):
-        self.value = value 
-        self.parent = None 
-        self.left = None 
-        self.right = None 
-
 class BinarySearchTree:
+    class Node:
+        def __init__(self, value):
+            self.value = value 
+            self.parent = None 
+            self.left = None 
+            self.right = None 
+
     def __init__(self):
         self.root = None 
 
     def insert(self, value):
-        node = Node(value)
+        node = self.Node(value)
         if self.root is None:
             self.root = node 
             return f"{value} added to tree"

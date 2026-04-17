@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, status, HTTPException
-from schemas.linked_list import Session, MessageResponse
+from schemas.base import Session, MessageResponse
 from schemas.tree import IntValue, HeapInsertResponse, HeapExtractResponse, Heapify
 from services.heap import Heap
 from utils import get_sessions

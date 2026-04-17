@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, status, Depends
-from schemas.linked_list import ActionResponse, Insert, Value, Index, MessageResponse, Session
+from schemas.base import Session, MessageResponse
+from schemas.linked_list import ActionResponse, Insert, Value, Index
 from services.doubly_linked_list import DoublyLinkedList
 from utils import get_sessions
 

@@ -1,16 +1,16 @@
-class Node:
-    def __init__(self, value):
-        self.value = value 
-        self.next = None 
-
 class Queue:
+    class Node:
+        def __init__(self, value):
+            self.value = value 
+            self.next = None 
+
     def __init__(self):
         self.head = None 
         self.tail = None 
         self.size = 0
 
     def enqueue(self, value):
-        node = Node(value)
+        node = self.Node(value)
         if self.head is None:
             self.head = node 
             self.tail = node 

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, status, HTTPException
-from schemas.linked_list import Session, MessageResponse, ActionResponse
+from schemas.base import Session, MessageResponse
+from schemas.linked_list import ActionResponse
 from schemas.tree import IntValue, NestedStructure
 from services.binary_search_tree import BinarySearchTree
 from utils import get_sessions
