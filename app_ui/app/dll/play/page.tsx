@@ -45,9 +45,12 @@ export default function Play() {
         setIndex(null)
         setDelIndex(-1)
         setMessage(null)
+        setError(null)
     }
 
     const insert = async () => {
+        setError(null)
+        setMessage(null)
         if (value === "") {
             setError("Value cannot be empty")
             return
@@ -56,8 +59,6 @@ export default function Play() {
             setError("Index cannot be negative")
             return
         }
-        setError(null)
-        setMessage(null)
         const response = await fetch("http://localhost:8000/dll/insert", {
             method: "POST",
             headers: {
@@ -80,12 +81,12 @@ export default function Play() {
     }
 
     const deleteElement = async () => {
+        setError(null)
+        setMessage(null)
         if (value === "") {
             setError("Value cannot be empty")
             return
         }
-        setError(null)
-        setMessage(null)
         const response = await fetch("http://localhost:8000/dll/delete", {
             method: "POST",
             headers: {

@@ -23,6 +23,9 @@ export default function Home() {
       <p><a href="/stack">Click for Stack</a></p>
       <p><a href="/queue">Click for Queue</a></p>
       <p><a href="/bst">Click for Binary Search Tree</a></p>
+      <p><a href="/heap">Click for Heap</a></p>
+      <p><a href="/trie">Click for Trie</a></p>
+      <p><a href="/graph">Click for Graph</a></p>
     </div>
   );
 }

@@ -17,9 +17,9 @@ export default function BST(){
                 <li>A <b>Binary Search Tree (BST)</b> is a hierarchical data structure made up of nodes, where each node contains a value, a parent, a left child, and a right child.</li>
                 <li>For any node, all values in its left subtree are less than the node’s value, and all values in its right subtree are greater.</li>
                 <li>The <b>root</b> is the topmost node of the tree. If the tree is empty, the root is <b>null</b>.</li>
-                <li>BSTs allow for efficient searching, insertion, and deletion of elements, with average time complexity of O(log n) if the tree is balanced.</li>
+                <li>BST&apos;s allow for efficient searching, insertion, and deletion of elements, with average time complexity of O(log n), if the tree is balanced.</li>
                 <li>Traversal methods include <b>in-order</b> (sorted order), <b>pre-order</b>, and <b>post-order</b>.</li>
-                <li>BSTs are used in searching, sorting, and maintaining dynamic sets of ordered data.</li>
+                <li>BST&apos;s are used in searching, sorting, and maintaining dynamic sets of ordered data.</li>
                 <li><i>Analogy:</i> Think of a family tree, where each person can have up to two children, and everyone to the left is &quot;smaller&quot; and to the right is &quot;greater&quot; in value.</li>
             </ul>
             <div className="flex justify-center mt-10 mb-5">
