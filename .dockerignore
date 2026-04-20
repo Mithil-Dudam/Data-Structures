@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pytest_cache/
+*.coverage
+*.mypy_cache/
+*.env
+.venv/
+env/
+venv/
+
+# Node/Next.js
+node_modules/
+.next/
+npm-debug.log
+yarn-error.log
+dist/
+coverage/
+app_ui/
+
+# OS/Editor
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# Git
+.git
+.gitignore
+
+# Misc
+*.log

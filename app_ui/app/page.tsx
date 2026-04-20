@@ -1,8 +1,11 @@
 "use client"
 
 import { useEffect } from "react"
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter()
+
   useEffect(() => {
     const createSession = async () => {
       const response = await fetch("http://localhost:8000/create-session", {
@@ -16,16 +19,20 @@ export default function Home() {
     createSession()
   }, [])
   return (
-    <div>
-      <h1 className="text-center">Hello!</h1>
-      <p><a href="/sll">Click for SLL</a></p>
-      <p><a href="/dll">Click for DLL</a></p>
-      <p><a href="/stack">Click for Stack</a></p>
-      <p><a href="/queue">Click for Queue</a></p>
-      <p><a href="/bst">Click for Binary Search Tree</a></p>
-      <p><a href="/heap">Click for Heap</a></p>
-      <p><a href="/trie">Click for Trie</a></p>
-      <p><a href="/graph">Click for Graph</a></p>
+    <div className="w-screen h-screen flex flex-col">
+      <h1 className="text-center text-5xl font-bold pt-10"><span className="border-b-4 border-yellow-300">Data Structures Visualizer</span></h1>
+      <div className="my-auto flex justify-center">
+        <ul className="flex flex-col items-center">
+          <li><button className="border-2 cursor-pointer my-2 p-2 text-2xl border-yellow-300 hover:font-semibold hover:text-black hover:bg-white" onClick={() => router.push("/sll")}>Singly Linked List</button></li>
+          <li><button className="border-2 cursor-pointer my-2 p-2 text-2xl border-yellow-300 hover:font-semibold hover:text-black hover:bg-white" onClick={() => router.push("/dll")}>Doubly Linked List</button></li>
+          <li><button className="border-2 cursor-pointer my-2 p-2 text-2xl border-yellow-300 hover:font-semibold hover:text-black hover:bg-white" onClick={() => router.push("/stack")}>Stack</button></li>
+          <li><button className="border-2 cursor-pointer my-2 p-2 text-2xl border-yellow-300 hover:font-semibold hover:text-black hover:bg-white" onClick={() => router.push("/queue")}>Queue</button></li>
+          <li><button className="border-2 cursor-pointer my-2 p-2 text-2xl border-yellow-300 hover:font-semibold hover:text-black hover:bg-white" onClick={() => router.push("/bst")}>Binary Search Tree</button></li>
+          <li><button className="border-2 cursor-pointer my-2 p-2 text-2xl border-yellow-300 hover:font-semibold hover:text-black hover:bg-white" onClick={() => router.push("/heap")}>Heap</button></li>
+          <li><button className="border-2 cursor-pointer my-2 p-2 text-2xl border-yellow-300 hover:font-semibold hover:text-black hover:bg-white" onClick={() => router.push("/trie")}>Trie</button></li>
+          <li><button className="border-2 cursor-pointer my-2 p-2 text-2xl border-yellow-300 hover:font-semibold hover:text-black hover:bg-white" onClick={() => router.push("/graph")}>Graph</button></li>
+        </ul>
+      </div>
     </div>
   );
 }

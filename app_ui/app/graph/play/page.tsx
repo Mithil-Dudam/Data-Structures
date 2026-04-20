@@ -42,7 +42,7 @@ const GraphSVG: React.FC<{ elements: GraphElements | null }> = ({ elements }) =>
                 />
             ))}
             {/* Nodes */}
-            {nodes.map((node, i) => (
+            {nodes.map((node) => (
                 <g key={node}>
                     <circle
                         cx={nodePos[node].x}
